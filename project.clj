@@ -10,4 +10,5 @@
                                                    [ring]]]
                  [ring/ring-json "0.2.0"]
                  [compojure "1.1.5" :exclusions [[org.clojure/clojure] [ring/ring-core]]]
-                 [cheshire "5.2.0"]])
+                 [cheshire "5.2.0"]
+                 [enlive "1.1.2"]])
