@@ -26,8 +26,7 @@
 
 (defn for-letter [letter]
   (map #(vector (-> % :attrs :id)
-                (-> % (the-first :a) :content
-                    (without-content whitespace (tag :img)) first string/trim)
+                (-> % enlive/text string/trim)
                 (-> % (the-first :a) :attrs :href))
        (-> (letter-url letter) enlive/html-resource (enlive/select [:ol.foods :li.food]))))
 
