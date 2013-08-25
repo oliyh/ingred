@@ -25,15 +25,19 @@
 ;; alphabetical
 
 (defn for-letter [letter]
-  (map #(vector (-> % :attrs :id)
-                (-> % enlive/text string/trim)
-                (-> % (the-first :a) :attrs :href))
+  (map (fn [%] {:id (-> % :attrs :id)
+               :name (-> % enlive/text string/trim)
+               :uri (-> % (the-first :a) :attrs :href)
+               :type :food})
        (-> (letter-url letter) enlive/html-resource (enlive/select [:ol.foods :li.food]))))
 
+;; for food ids
 
-(comment
-  (defn for-food [food-id]
-    (-> (dishes-url food-id) enlive/html-resource (enlive/select [:div#article-list :li.article :h3]))))
+(defn for-food [food-id]
+  (map (fn [%] {:name (-> % enlive/text)
+               :uri (-> % :attrs :href)})
+       (-> (dishes-url food-id) enlive/html-resource
+           (enlive/select [:div#article-list :li.article :h3 :a]))))
 
 
 
