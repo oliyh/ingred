@@ -24,22 +24,39 @@
 
 ;; alphabetical
 
-(defn for-letter [letter]
+(defn foods-for-letter [letter]
   (map (fn [%] {:id (-> % :attrs :id)
                :name (-> % enlive/text string/trim)
                :uri (-> % (the-first :a) :attrs :href)
                :type :food})
-       (-> (letter-url letter) enlive/html-resource (enlive/select [:ol.foods :li.food]))))
+       (-> (letter-url letter) enlive/html-resource
+           (enlive/select [:ol.foods :li.food]))))
 
 ;; for food ids
 
-(defn for-food [food-id]
+(defn recipes-for-food [food-id]
   (map (fn [%] {:name (-> % enlive/text)
-               :uri (-> % :attrs :href)})
+               :uri (-> % :attrs :href)
+               :type :recipe})
        (-> (dishes-url food-id) enlive/html-resource
            (enlive/select [:div#article-list :li.article :h3 :a]))))
 
+;; the recipe
 
+(defn read-recipe [uri]
+  (let [content (-> (str bbc-root uri) URL. enlive/html-resource)]
+    {:name (-> content (enlive/select [:div.article-title :h1]) first enlive/text)
+     :uri uri
+     :preparation-time (-> content (enlive/select [:span.prepTime :span.value-title]) first :attrs :title)
+     :cooking-time (-> content (enlive/select [:span.cookTime :span.value-title]) first :attrs :title)
+     :yield (-> content (enlive/select [:h3.yield]) first enlive/text)
+     :ingredients
+     (map (fn [%] {:name (-> % (the-first :a) enlive/text)
+                  :uri (-> % (the-first :a) :attrs :href)
+                  :qty (-> % :content (without-content (tag :a)) first)
+                  :preparation (-> % :content (without-content (tag :a)) second)
+                  :type :ingredient})
+          (-> content (enlive/select [:div#ingredients :p.ingredient])))}))
 
 ;; by cuisine
 
