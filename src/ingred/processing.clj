@@ -52,8 +52,9 @@ backed by a queue of the same given size."
 
     out-seq))
 
-;; a lazy mapcat, from http://clojurian.blogspot.co.uk/2012/11/beware-of-mapcat.html
+;; from http://clojurian.blogspot.co.uk/2012/11/beware-of-mapcat.html
 (defn unfold
+  "lazily concat a sequence of sequences"
   [coll]
   (lazy-seq
    (if (not-empty coll)
