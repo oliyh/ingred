@@ -1,14 +1,19 @@
 (ns ingred.scraper
   (:require [clj-http.client :as client]
             [net.cgrand.enlive-html :as enlive]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [ingred.processing :as processing])
   (:import [java.net URL]))
+
+;; routes
 
 (def letters "abcdefghijklmnopqrstuvwxyz")
 (def bbc-root "http://www.bbc.co.uk")
 (def cuisines-url (str bbc-root "/food/cuisines"))
 (defn dishes-url [dish] (URL. (str bbc-root "/food/recipes/search?dishes[]=" (string/lower-case dish))))
 (defn letter-url [letter] (URL. (str bbc-root "/food/dishes/by/letter/" letter)))
+
+;; helpers
 
 (def whitespace
   #(and (string? %) (string/blank? %)))
@@ -25,6 +30,7 @@
 ;; alphabetical
 
 (defn foods-for-letter [letter]
+  (println "reading foods for" letter)
   (map (fn [%] {:id (-> % :attrs :id)
                :name (-> % enlive/text string/trim)
                :uri (-> % (the-first :a) :attrs :href)
@@ -35,6 +41,7 @@
 ;; for food ids
 
 (defn recipes-for-food [food-id]
+  (println "reading recipes for" food-id)
   (map (fn [%] {:name (-> % enlive/text)
                :uri (-> % :attrs :href)
                :type :recipe})
@@ -44,6 +51,7 @@
 ;; the recipe
 
 (defn read-recipe [uri]
+  (println "reading recipe for" uri)
   (let [content (-> (str bbc-root uri) URL. enlive/html-resource)]
     {:name (-> content (enlive/select [:div.article-title :h1]) first enlive/text)
      :uri uri
@@ -60,6 +68,20 @@
      :instructions
      (map (comp string/trim enlive/text)
           (-> content (enlive/select [:div#preparation :li.instruction])))}))
+
+
+;; scraping
+
+(defn scrape-all []
+  (time
+   (->> letters
+        (take 2)
+        (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 1)
+        processing/unfold
+        (processing/pipe-seq (fn [x] (recipes-for-food (:id x))) 4 1)
+        processing/unfold
+        (processing/pipe-seq (fn [x] (read-recipe (:uri x))) 4 1))))
+
 
 ;; by cuisine
 
