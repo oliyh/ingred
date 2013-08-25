@@ -56,7 +56,10 @@
                   :qty (-> % :content (without-content (tag :a)) first)
                   :preparation (-> % :content (without-content (tag :a)) second)
                   :type :ingredient})
-          (-> content (enlive/select [:div#ingredients :p.ingredient])))}))
+          (-> content (enlive/select [:div#ingredients :p.ingredient])))
+     :instructions
+     (map (comp string/trim enlive/text)
+          (-> content (enlive/select [:div#preparation :li.instruction])))}))
 
 ;; by cuisine
 
