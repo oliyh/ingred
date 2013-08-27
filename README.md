@@ -1,13 +1,11 @@
 # ingred
 
-A Clojure library designed to ... well, that part is up to you.
+A recipe store allowing search by ingredient.
 
-## Usage
-
-FIXME
+Recipes scraped from the BBC Food website using enlive.
 
 ## License
 
-Copyright © 2013 FIXME
+Copyright © 2013 oliyh
 
 Distributed under the Eclipse Public License, the same as Clojure.
