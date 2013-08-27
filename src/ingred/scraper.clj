@@ -2,7 +2,8 @@
   (:require [clj-http.client :as client]
             [net.cgrand.enlive-html :as enlive]
             [clojure.string :as string]
-            [ingred.processing :as processing])
+            [ingred.processing :as processing]
+            [ingred.store :as store])
   (:import [java.net URL]))
 
 ;; routes
@@ -75,12 +76,13 @@
 (defn scrape-all []
   (time
    (->> letters
-        (take 2)
+        (take 1)
         (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 1)
         processing/unfold
         (processing/pipe-seq (fn [x] (recipes-for-food (:id x))) 4 1)
         processing/unfold
-        (processing/pipe-seq (fn [x] (read-recipe (:uri x))) 4 1))))
+        (processing/pipe-seq (fn [x] (read-recipe (:uri x))) 4 1)
+        (processing/pipe-seq (fn [x] (store/save x)) 4 1))))
 
 
 ;; by cuisine
