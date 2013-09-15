@@ -3,8 +3,22 @@ function populateIngredients() {
 	$.each(data, function(i, e) {
 	    var ingredient = $('<li/>')
 		.append($('<a/>', {class: 'label label-success', href: e.url, title: e.name})
-			.text(e.name));
+			.text(e.name)
+			.click(function() { filterRecipes(e.name); return false; }));
 	    $('#ingredients').append(ingredient);
+	});
+    });
+}
+
+function filterRecipes(ingredient) {
+    $.get('/ingredients/' + ingredient, function (data) {
+	$('#letters').empty();
+	$.each(data, function(i, e) {
+	    var recipe = $('<li/>')
+		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
+			.text(e.name)
+			.click(function() { loadRecipe(e.url); return false; }));
+	    $('#letters').append(recipe);
 	});
     });
 }
