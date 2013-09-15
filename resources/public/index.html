@@ -1,1 +1,49 @@
-<h1>Ingred</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ingred</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/ingred.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div class="row">
+      <div class="col-lg-10 col-lg-offset-1">
+	<h1>Ingred</h1>
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/ingred.js"></script>
+	<p>
+	  Ingred is a REST API for an index of recipes and ingredients, written in Clojure.
+	</p>
+	<p>
+	  <span class="label label-info">
+	    <a href="http://oliy.co.uk" title="oliy.co.uk">oliy.co.uk</a>
+	  </span>
+	  <span class="label label-info">
+	    <a href="https://github.com/oliyh/ingred" title="Ingred on GitHub">
+	      Ingred on GitHub
+	    </a>
+	  </span>
+	</p>
+
+	<div id="ingredients-panel" class="panel">
+	  <h2>Ingredients</h2>
+	  <ul id="ingredients" class="clearfix"></ul>
+	</div>
+
+	<div id="recipe-list-panel" class="panel">
+	  <h2>Recipes</h2>
+	  <ul id="letters" class="clearfix"></ul>
+	</div>
+
+	<div id="recipe-panel" class="panel">
+	  <h2 id="recipe-name">Recipe name</h2>
+	  <p id="recipe-description"></p>
+	  <ul id="recipe-ingredients"></ul>
+	  <ol id="recipe-instructions"></ol>
+	</div>
+
+      </div>
+  </body>
+</html>
