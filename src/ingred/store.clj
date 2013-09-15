@@ -27,7 +27,7 @@
   (let [id (str (:_id m))]
     (assoc (dissoc m :_id) :id id)))
 
-(defn load [id]
+(defn load-recipe [id]
   (replace-_id (mc/find-map-by-id table (ObjectId. id))))
 
 (defn list-all []

@@ -21,7 +21,7 @@
   (response (into #{} (map #(assoc % :url (str "/ingredients/" (:name %))) (store/list-ingredients)))))
 
 (defn load-recipe [id]
-  (response (store/load id)))
+  (response (store/load-recipe id)))
 
 (defn config []
   (response (cfg/config)))
