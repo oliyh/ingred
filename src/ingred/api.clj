@@ -1,7 +1,8 @@
 (ns ingred.api
   (:use [ring.util.response])
   (:require [cornerstone.config :as cfg]
-            [ingred.store :as store]))
+            [ingred.store :as store]
+            [ingred.scraper :as scraper]))
 
 (defn index []
   (slurp "resources/public/index.html"))
@@ -24,3 +25,6 @@
 
 (defn config []
   (response (cfg/config)))
+
+(defn populate [letter]
+  (response (scraper/scrape-all [letter])))

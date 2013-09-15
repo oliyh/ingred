@@ -1,5 +1,6 @@
 function populateIngredients() {
     $.get('/ingredients/', function (data) {
+	$('#ingredients').empty();
 	$.each(data, function(i, e) {
 	    var ingredient = $('<li/>')
 		.append($('<a/>', {class: 'label label-success', href: e.url, title: e.name})
@@ -28,6 +29,7 @@ function filterRecipes(ingredient) {
 function populateRecipes() {
     $.get('/recipes/', function (data) {
 	$('#filter').hide();
+	$('#letters').empty();
 	$.each(data, function(i, e) {
 	    var recipe = $('<li/>')
 		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
@@ -73,4 +75,11 @@ $(document).ready(function () {
     populateIngredients();
     populateRecipes();
     $('#reset-filter').click(resetFilter);
+    $('#populate-button').click(function() {
+	$.post('/admin/populate/' + $('#populate-letter').val(), function(data) {
+	    alert("Populated letter " + $('#populate-letter').val());
+	    populateRecipes();
+	    populateIngredients();
+	});
+    });
 });

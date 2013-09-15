@@ -16,7 +16,8 @@
   (GET "/ingredients/" [] (api/list-ingredients))
   (GET "/ingredients/:ingredient" [ingredient] (api/list-recipes-for ingredient))
 
-  (GET "/config" [] (api/config)))
+  (GET "/config" [] (api/config))
+  (POST "/admin/populate/:letter" [letter] (api/populate letter)))
 
 (defroutes app-routes
   (c-route/resources "/")

@@ -78,17 +78,17 @@
   (config/bootstrap {:name "dev"})
   (store/init))
 
-(defn scrape-all []
-  (init)
-  (time
-   (->> letters
-        (take 1)
-        (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 1)
-        processing/unfold
-        (processing/pipe-seq (fn [x] (recipes-for-food (:id x))) 4 1)
-        processing/unfold
-        (processing/pipe-seq (fn [x] (read-recipe (:uri x))) 4 1)
-        (processing/pipe-seq (fn [x] (store/save x)) 4 1))))
+(defn scrape-all
+  ([] (scrape-all (take 1 letters)))
+  ([letters]
+     (time
+      (->> letters
+           (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 1)
+           processing/unfold
+           (processing/pipe-seq (fn [x] (recipes-for-food (:id x))) 4 1)
+           processing/unfold
+           (processing/pipe-seq (fn [x] (read-recipe (:uri x))) 4 1)
+           (processing/pipe-seq (fn [x] (store/save x)) 4 1)))))
 
 
 ;; by cuisine
