@@ -1,7 +1,8 @@
 (ns ingred.store
   (:require [monger.core :as m]
             [monger.collection :as mc]
-            [monger.joda-time])
+            [monger.joda-time]
+            [cornerstone.config :refer [config]])
   (:import [org.bson.types ObjectId]
            [com.mongodb DB WriteConcern]))
 
@@ -10,7 +11,7 @@
 (defn init
   "Connect to Mongo"
   []
-  (m/connect-via-uri! "mongodb://localhost/ingred")
+  (m/connect-via-uri! (config :MONGOLAB_URI))
   (m/set-db! (m/get-db))) ;; db name is in the uri
 
 (defn- replace-id [id m]

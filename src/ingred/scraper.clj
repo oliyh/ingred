@@ -3,7 +3,8 @@
             [net.cgrand.enlive-html :as enlive]
             [clojure.string :as string]
             [ingred.processing :as processing]
-            [ingred.store :as store])
+            [ingred.store :as store]
+            [cornerstone.config :as config])
   (:import [java.net URL]))
 
 ;; routes
@@ -73,7 +74,12 @@
 
 ;; scraping
 
+(defn init []
+  (config/bootstrap {:name "dev"})
+  (store/init))
+
 (defn scrape-all []
+  (init)
   (time
    (->> letters
         (take 1)
