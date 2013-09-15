@@ -7,7 +7,10 @@
   (slurp "resources/public/index.html"))
 
 (defn list-recipes []
-  (map #(select-keys % [:id :name]) (store/list)))
+  (response (map #(select-keys % [:id :name]) (store/list))))
+
+(defn load-recipe [id]
+  (response (store/load id)))
 
 (defn config []
   (response (cfg/config)))
