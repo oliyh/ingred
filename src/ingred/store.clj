@@ -30,9 +30,14 @@
 (defn load [id]
   (replace-_id (mc/find-map-by-id table (ObjectId. id))))
 
-(defn list []
+(defn list-all []
   (map replace-_id (mc/find-maps table)))
 
 (defn by-letter [letter]
   (map replace-_id (mc/find-maps table
                                  {:name {$regex (str "^" letter ".*") $options "i"}})))
+
+(defn by-ingredient [ingredient]
+  (println "ingredient: " ingredient)
+  (map replace-_id (mc/find-maps table
+                                 {:ingredients.name {$in [ingredient]}})))

@@ -10,8 +10,11 @@
   (map #(select-keys % [:id :name]) recipes))
 
 (defn list-recipes
-  ([] (response (id-and-name (store/list))))
+  ([] (response (id-and-name (store/list-all))))
   ([letter] (response (id-and-name (store/by-letter letter)))))
+
+(defn list-recipes-for [ingredient]
+  (response (id-and-name (store/by-ingredient ingredient))))
 
 (defn load-recipe [id]
   (response (store/load id)))
