@@ -43,6 +43,8 @@ function loadRecipe(url) {
 	    var ingredient = $('<li/>').text(e)
 	    $('#recipe-instructions').append(ingredient);
 	});
+
+	$('#recipe-panel').show();
     });
 }
 

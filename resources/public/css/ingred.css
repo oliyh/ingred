@@ -17,3 +17,7 @@
   list-style-type: none;
   float: left;
 }
+
+#recipe-panel {
+    display: none;
+}
