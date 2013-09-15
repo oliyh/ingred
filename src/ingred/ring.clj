@@ -1,10 +1,12 @@
 (ns ingred.ring
   (:require [ingred.routes :as routes]
             [ring.middleware.json :as ring-json]
-            [compojure.handler :as handler]))
+            [compojure.handler :as handler]
+            [ingred.store :as store]))
 
 (defn init []
-  (println "Ingred is starting"))
+  (println "Ingred is starting")
+  (store/init))
 
 (defn destroy []
   (println "Ingred is stopping"))

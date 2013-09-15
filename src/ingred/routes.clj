@@ -8,6 +8,7 @@
 
 (defroutes site
   (GET "/" [] (api/index))
+  (GET "/recipes/" [] (api/list-recipes))
   (GET "/config" [] (api/config)))
 
 (defroutes app-routes
