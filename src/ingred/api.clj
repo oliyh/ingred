@@ -6,8 +6,12 @@
 (defn index []
   (slurp "resources/public/index.html"))
 
-(defn list-recipes []
-  (response (map #(select-keys % [:id :name]) (store/list))))
+(defn- id-and-name [recipes]
+  (map #(select-keys % [:id :name]) recipes))
+
+(defn list-recipes
+  ([] (response (id-and-name (store/list))))
+  ([letter] (response (id-and-name (store/by-letter letter)))))
 
 (defn load-recipe [id]
   (response (store/load id)))

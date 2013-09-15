@@ -1,4 +1,5 @@
 (ns ingred.store
+  (:use monger.operators)
   (:require [monger.core :as m]
             [monger.collection :as mc]
             [monger.joda-time]
@@ -31,3 +32,7 @@
 
 (defn list []
   (map replace-_id (mc/find-maps table)))
+
+(defn by-letter [letter]
+  (map replace-_id (mc/find-maps table
+                                 {:name {$regex (str "^" letter ".*") $options "i"}})))
