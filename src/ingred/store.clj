@@ -38,6 +38,5 @@
                                  {:name {$regex (str "^" letter ".*") $options "i"}})))
 
 (defn by-ingredient [ingredient]
-  (println "ingredient: " ingredient)
   (map replace-_id (mc/find-maps table
                                  {:ingredients.name {$in [ingredient]}})))
