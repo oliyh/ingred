@@ -16,6 +16,9 @@
 (defn list-recipes-for [ingredient]
   (response (id-and-name (store/by-ingredient ingredient))))
 
+(defn list-ingredients []
+  (response (into #{} (map :name (store/list-ingredients)))))
+
 (defn load-recipe [id]
   (response (store/load id)))
 

@@ -13,6 +13,7 @@
   (GET "/recipes/:letter/" [letter] (api/list-recipes letter))
   (GET "/recipes/:id" [id] (api/load-recipe id))
 
+  (GET "/ingredients/" [] (api/list-ingredients))
   (GET "/ingredients/:ingredient" [ingredient] (api/list-recipes-for ingredient))
 
   (GET "/config" [] (api/config)))

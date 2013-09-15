@@ -40,3 +40,6 @@
 (defn by-ingredient [ingredient]
   (map replace-_id (mc/find-maps table
                                  {:ingredients.name {$in [ingredient]}})))
+
+(defn list-ingredients []
+  (mapcat :ingredients (mc/find-maps table {} ["ingredients.name"])))
