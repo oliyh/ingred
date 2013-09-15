@@ -13,4 +13,11 @@
                  [cheshire "5.2.0"]
                  [enlive "1.1.2"]
                  [com.novemberain/monger "1.6.0"]
-                 [cornerstone "0.1.0-SNAPSHOT"]])
+                 [cornerstone "0.1.0-SNAPSHOT"]]
+  :plugins [[lein-ring "0.8.3" :exclusions [org.clojure/clojure]]]
+  :profiles {:production
+             {:ring {:open-browser? false, :stacktraces? false, :auto-reload? false}}}
+  :ring {:handler ingred.ring/war-handler
+         :init ingred.ring/init
+         :destroy ingred.ring/destroy}
+  :main ingred.server)
