@@ -13,6 +13,8 @@ function populateIngredients() {
 function filterRecipes(ingredient) {
     $.get('/ingredients/' + ingredient, function (data) {
 	$('#letters').empty();
+	$('#filter-ingredient').text(ingredient);
+	$('#filter').show();
 	$.each(data, function(i, e) {
 	    var recipe = $('<li/>')
 		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
@@ -25,6 +27,7 @@ function filterRecipes(ingredient) {
 
 function populateRecipes() {
     $.get('/recipes/', function (data) {
+	$('#filter').hide();
 	$.each(data, function(i, e) {
 	    var recipe = $('<li/>')
 		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
@@ -62,7 +65,12 @@ function loadRecipe(url) {
     });
 }
 
+function resetFilter() {
+    populateRecipes();
+}
+
 $(document).ready(function () {
     populateIngredients();
     populateRecipes();
+    $('#reset-filter').click(resetFilter);
 });

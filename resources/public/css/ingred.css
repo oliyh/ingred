@@ -21,3 +21,11 @@
 #recipe-panel {
     display: none;
 }
+
+#filter {
+    display: none;
+}
+
+#reset-filter {
+    float: right;
+}
