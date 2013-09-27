@@ -35,7 +35,7 @@
 
 (defn by-letter [letter]
   (map replace-_id (mc/find-maps table
-                                 {:name {$regex (str "^" letter ".*") $options "i"}})))
+                                 {:food.letter letter})))
 
 (defn by-ingredient [ingredient]
   (map replace-_id (mc/find-maps table
