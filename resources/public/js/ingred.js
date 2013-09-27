@@ -87,6 +87,10 @@ function wipeStore() {
 }
 
 $(document).ready(function () {
+    $.each("abcdefghijklmnopqrstuvwxyz".split(""), function(i, e) {
+	$('#populate-letter').append($('<option/>', {value: e, text: e}));
+    });
+
     populateIngredients();
     populateRecipes();
     $('#reset-filter').click(resetFilter);
