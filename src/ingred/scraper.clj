@@ -58,6 +58,7 @@
   (println "reading recipe for" uri)
   (let [content (-> (str bbc-root uri) URL. enlive/html-resource)]
     {:name (-> content (enlive/select [:div.article-title :h1]) first enlive/text)
+     :id (last (clojure.string/split uri #"/"))
      :food food
      :uri uri
      :preparation-time (-> content (enlive/select [:span.prepTime :span.value-title]) first :attrs :title)
