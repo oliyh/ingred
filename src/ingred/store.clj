@@ -43,3 +43,6 @@
 
 (defn list-ingredients []
   (mapcat :ingredients (mc/find-maps table {} ["ingredients.name"])))
+
+(defn wipe-db []
+  (mc/remove table))
