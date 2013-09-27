@@ -26,20 +26,6 @@ function filterRecipes(ingredient) {
     });
 }
 
-function populateRecipes() {
-    $.get('/recipes/', function (data) {
-	$('#filter').hide();
-	$('#letters').empty();
-	$.each(data, function(i, e) {
-	    var recipe = $('<li/>')
-		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
-			.text(e.name)
-			.click(function() { loadRecipe(e.url); return false; }));
-	    $('#letters').append(recipe);
-	});
-    });
-}
-
 function loadRecipe(url) {
     $.get(url, function (recipe) {
 	$('#recipe-name').text(recipe.name);
@@ -71,6 +57,35 @@ function resetFilter() {
     populateRecipes();
 }
 
+
+// admin
+
+function populateRecipes() {
+    $.get('/recipes/', function (data) {
+	$('#filter').hide();
+	$('#letters').empty();
+	$.each(data, function(i, e) {
+	    var recipe = $('<li/>')
+		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
+			.text(e.name)
+			.click(function() { loadRecipe(e.url); return false; }));
+	    $('#letters').append(recipe);
+	});
+    });
+}
+
+function wipeStore() {
+    $.ajax('/admin/wipe',
+	   {type: "delete",
+	    success: function (data) {
+		alert("Wipe result:" + JSON.stringify(data));
+		populateRecipes();
+		populateIngredients();
+		$('#recipe-panel').hide();
+	    }
+	   });
+}
+
 $(document).ready(function () {
     populateIngredients();
     populateRecipes();
@@ -82,4 +97,5 @@ $(document).ready(function () {
 	    populateIngredients();
 	});
     });
+    $('#wipe-button').click(wipeStore);
 });
