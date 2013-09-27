@@ -28,3 +28,7 @@
 
 (defn populate [letter]
   (response (scraper/scrape-all [letter])))
+
+(defn wipe-store []
+  (store/wipe-db)
+  (response {:result "ok"}))

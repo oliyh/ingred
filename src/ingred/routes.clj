@@ -17,7 +17,8 @@
   (GET "/ingredients/:ingredient" [ingredient] (api/list-recipes-for ingredient))
 
   (GET "/config" [] (api/config))
-  (POST "/admin/populate/:letter" [letter] (api/populate letter)))
+  (POST "/admin/populate/:letter" [letter] (api/populate letter))
+  (DELETE "/admin/wipe" [] (api/wipe-store)))
 
 (defroutes app-routes
   (c-route/resources "/")
