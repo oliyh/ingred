@@ -36,26 +36,29 @@
   (map (fn [%] {:id (-> % :attrs :id)
                :name (-> % enlive/text string/trim)
                :uri (-> % (the-first :a) :attrs :href)
-               :type :food})
+               :type :food
+               :letter letter})
        (-> (letter-url letter) enlive/html-resource
            (enlive/select [:ol.foods :li.food]))))
 
 ;; for food ids
 
-(defn recipes-for-food [food-id]
-  (println "reading recipes for" food-id)
+(defn recipes-for-food [{:keys [id] :as food}]
+  (println "reading recipes for" id)
   (map (fn [%] {:name (-> % enlive/text)
                :uri (-> % :attrs :href)
+               :food food
                :type :recipe})
-       (-> (dishes-url food-id) enlive/html-resource
+       (-> (dishes-url id) enlive/html-resource
            (enlive/select [:div#article-list :li.article :h3 :a]))))
 
 ;; the recipe
 
-(defn read-recipe [uri]
+(defn read-recipe [{:keys [uri food] :as recipe}]
   (println "reading recipe for" uri)
   (let [content (-> (str bbc-root uri) URL. enlive/html-resource)]
     {:name (-> content (enlive/select [:div.article-title :h1]) first enlive/text)
+     :food food
      :uri uri
      :preparation-time (-> content (enlive/select [:span.prepTime :span.value-title]) first :attrs :title)
      :cooking-time (-> content (enlive/select [:span.cookTime :span.value-title]) first :attrs :title)
@@ -85,9 +88,9 @@
       (->> letters
            (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 1)
            processing/unfold
-           (processing/pipe-seq (fn [x] (recipes-for-food (:id x))) 4 1)
+           (processing/pipe-seq (fn [x] (recipes-for-food x)) 4 1)
            processing/unfold
-           (processing/pipe-seq (fn [x] (read-recipe (:uri x))) 4 1)
+           (processing/pipe-seq (fn [x] (read-recipe x)) 4 1)
            (processing/pipe-seq (fn [x] (store/save x)) 4 1)))))
 
 
