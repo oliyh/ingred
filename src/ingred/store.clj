@@ -19,7 +19,7 @@
   (assoc (dissoc m :id) :_id id))
 
 (defn save [m]
-  (let [id (if-let [id (:id m)] (ObjectId. id) (ObjectId.))]
+  (let [id (or (:id m) (ObjectId.))]
     (mc/update table {:_id id} (replace-id id m) :upsert true)
     {:id (str id)}))
 
@@ -28,7 +28,7 @@
     (assoc (dissoc m :_id) :id id)))
 
 (defn load-recipe [id]
-  (replace-_id (mc/find-map-by-id table (ObjectId. id))))
+  (replace-_id (mc/find-map-by-id table (or (ObjectId/massageToObjectId id) id))))
 
 (defn list-all []
   (map replace-_id (mc/find-maps table)))
