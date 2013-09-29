@@ -6,13 +6,7 @@
     margin-right: 4px;
 }
 
-#ingredients li {
-  display: inline;
-  list-style-type: none;
-  float: left;
-}
-
-#letters li {
+#recipes li, #alphabet li, #ingredients li {
   display: inline;
   list-style-type: none;
   float: left;

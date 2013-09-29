@@ -5,23 +5,40 @@ function populateIngredients() {
 	    var ingredient = $('<li/>')
 		.append($('<a/>', {class: 'label label-success', href: e.url, title: e.name})
 			.text(e.name)
-			.click(function() { filterRecipes(e.name); return false; }));
+			.click(function() { filterRecipesByIngredient(e.name); return false; }));
 	    $('#ingredients').append(ingredient);
 	});
     });
 }
 
-function filterRecipes(ingredient) {
+function filterRecipesByIngredient(ingredient) {
     $.get('/ingredients/' + ingredient, function (data) {
-	$('#letters').empty();
-	$('#filter-ingredient').text(ingredient);
+	$('#recipes').empty();
+	$('#filterValue').text(ingredient);
+	$('#filterType').text('ingredient');
 	$('#filter').show();
 	$.each(data, function(i, e) {
 	    var recipe = $('<li/>')
 		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
 			.text(e.name)
 			.click(function() { loadRecipe(e.url); return false; }));
-	    $('#letters').append(recipe);
+	    $('#recipes').append(recipe);
+	});
+    });
+}
+
+function filterRecipesByLetter(letter) {
+    $.get('/recipes/' + letter + '/', function (data) {
+	$('#recipes').empty();
+	$('#filterValue').text(letter);
+	$('#filterType').text('letter');
+	$('#filter').show();
+	$.each(data, function(i, e) {
+	    var recipe = $('<li/>')
+		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
+			.text(e.name)
+			.click(function() { loadRecipe(e.url); return false; }));
+	    $('#recipes').append(recipe);
 	});
     });
 }
@@ -63,13 +80,13 @@ function resetFilter() {
 function populateRecipes() {
     $.get('/recipes/', function (data) {
 	$('#filter').hide();
-	$('#letters').empty();
+	$('#recipes').empty();
 	$.each(data, function(i, e) {
 	    var recipe = $('<li/>')
 		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
 			.text(e.name)
 			.click(function() { loadRecipe(e.url); return false; }));
-	    $('#letters').append(recipe);
+	    $('#recipes').append(recipe);
 	});
     });
 }
@@ -87,8 +104,17 @@ function wipeStore() {
 }
 
 $(document).ready(function () {
-    $.each("abcdefghijklmnopqrstuvwxyz".split(""), function(i, e) {
+    var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+    $.each(alphabet, function(i, e) {
 	$('#populate-letter').append($('<option/>', {value: e, text: e}));
+    });
+
+    $.each(alphabet, function(i, e) {
+	var letter = $('<li/>')
+	    .append($('<a/>', {class: 'label label-info', href: 'recipes/' + e + '/', title: e})
+		    .text(e)
+		    .click(function() { filterRecipesByLetter(e); return false; }));
+	$('#alphabet').append(letter);
     });
 
     populateIngredients();
