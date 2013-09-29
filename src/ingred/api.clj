@@ -27,7 +27,8 @@
   (response (cfg/config)))
 
 (defn populate [letter]
-  (response (scraper/scrape-all [letter])))
+  (let [progress (scraper/scrape-all [letter])]
+    (response {:total (deref (:total progress)) :complete (deref (:complete progress))})))
 
 (defn wipe-store []
   (store/wipe-db)

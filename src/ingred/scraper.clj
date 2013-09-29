@@ -32,7 +32,7 @@
 ;; alphabetical
 
 (defn foods-for-letter [letter]
-  (println "reading foods for" letter)
+  ;;(println "reading foods for" letter)
   (map (fn [%] {:id (-> % :attrs :id)
                :name (-> % enlive/text string/trim)
                :uri (-> % (the-first :a) :attrs :href)
@@ -44,7 +44,7 @@
 ;; for food ids
 
 (defn recipes-for-food [{:keys [id] :as food}]
-  (println "reading recipes for" id)
+  ;;(println "reading recipes for" id)
   (map (fn [%] {:name (-> % enlive/text)
                :uri (-> % :attrs :href)
                :food food
@@ -85,15 +85,29 @@
 (defn scrape-all
   ([] (scrape-all (take 1 letters)))
   ([letters]
-     (time
-      (->> letters
-           (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 1)
-           processing/unfold
-           (processing/pipe-seq (fn [x] (recipes-for-food x)) 4 1)
-           processing/unfold
-           (processing/pipe-seq (fn [x] (read-recipe x)) 4 1)
-           (processing/pipe-seq (fn [x] (store/save x)) 4 1)))))
-
+     (let [total (atom 0)
+           complete (atom 0)]
+       (future
+         (time
+          (doall
+           (->> letters
+                (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 1)
+                processing/unfold
+                (processing/pipe-seq
+                 (fn [x]
+                   (let [recipes (recipes-for-food x)]
+                     (swap! total + (count recipes))
+                     recipes))
+                 4 1)
+                processing/unfold
+                (processing/pipe-seq (fn [x] (read-recipe x)) 4 1)
+                (processing/pipe-seq
+                 (fn [x]
+                   (swap! complete inc)
+                   (println "saved" (:uri x))
+                   (:id (store/save x)))
+                 4 1)))))
+       {:total total :complete complete})))
 
 ;; by cuisine
 
