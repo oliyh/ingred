@@ -80,6 +80,10 @@ function resetFilter() {
 function updateProgressBar(uri) {
     $.get(uri, function (data) {
 	$('#progress').css('width', data.percent + '%');
+	$('#elapsed').text(data['elapsed-human']);
+	$('#total').text(data.total);
+	$('#complete').text(data.complete);
+
 	if (data.percent < 100) {
 	    setTimeout(function() { updateProgressBar(uri); }, 1000);
 	} else {

@@ -31,11 +31,15 @@
   (response (cfg/config)))
 
 (defn progress-for [uuid]
-  (let [{:keys [total complete]} (get @progresses uuid)]
+  (let [{:keys [total complete started]} (get @progresses uuid)
+        elapsed (- (System/currentTimeMillis) started)]
     (response {:uri (str "/progress/" uuid)
                :total @total
                :complete @complete
-               :percent (Math/round (double (* 100 (/ @complete (max @total 1)))))})))
+               :percent (Math/round (double (* 100 (/ @complete (max @total 1)))))
+               :started started
+               :elapsed elapsed
+               :elapsed-human (str (Math/round (double (/ elapsed 1000))) "s")})))
 
 (defn populate [letter]
   (let [progress (scraper/scrape-all [letter])

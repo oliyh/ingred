@@ -107,7 +107,7 @@
                    (println "saved" (:uri x))
                    (:id (store/save x)))
                  4 10)))))
-       {:total total :complete complete})))
+       {:total total :complete complete :started (System/currentTimeMillis)})))
 
 ;; by cuisine
 
