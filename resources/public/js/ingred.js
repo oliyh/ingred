@@ -40,20 +40,14 @@ function populateIngredients() {
 
 function filterRecipesByIngredient(ingredient) {
     $.get('/ingredients/' + ingredient, function (data) {
-	$('#recipes').empty();
-	$('#filterValue').text(ingredient);
-	$('#filterType').text('ingredient');
-	$('#filter').show();
+	showFilter('ingredient', ingredient);
 	appendRecipes(data);
     });
 }
 
 function filterRecipesByLetter(letter) {
     $.get('/recipes/' + letter + '/', function (data) {
-	$('#recipes').empty();
-	$('#filterValue').text(letter);
-	$('#filterType').text('letter');
-	$('#filter').show();
+	showFilter('letter', letter);
 	appendRecipes(data);
     });
 }
@@ -61,10 +55,7 @@ function filterRecipesByLetter(letter) {
 function searchRecipes() {
     var searchTerm = $('#search-term').val();
     $.get('/recipes/search/' + searchTerm + '/', function (data) {
-	$('#recipes').empty();
-	$('#filterValue').text(searchTerm);
-	$('#filterType').text('search term');
-	$('#filter').show();
+	showFilter('search term', searchTerm);
 	appendRecipes(data);
     });
 }
@@ -85,6 +76,12 @@ function appendRecipes(recipes) {
 		    .click(function() { loadRecipe(e.url); return false; }));
 	$('#recipes').append(recipe);
     });
+}
+
+function showFilter(type, value) {
+    $('#filterValue').text(value);
+    $('#filterType').text(type);
+    $('#filter').show();
 }
 
 function resetFilter() {
