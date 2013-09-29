@@ -3,7 +3,8 @@
   (:require [cornerstone.config :as cfg]
             [ingred.store :as store]
             [ingred.scraper :as scraper])
-  (:import [java.util UUID]))
+  (:import [java.util UUID]
+           ))
 
 (def progresses (atom {}))
 
@@ -30,10 +31,11 @@
   (response (cfg/config)))
 
 (defn progress-for [uuid]
-  (let [progress (get @progresses uuid)]
+  (let [{:keys [total complete]} (get @progresses uuid)]
     (response {:uri (str "/progress/" uuid)
-               :total (deref (:total progress))
-               :complete (deref (:complete progress))})))
+               :total @total
+               :complete @complete
+               :percent (Math/round (double (* 100 (/ @complete (max @total 1)))))})))
 
 (defn populate [letter]
   (let [progress (scraper/scrape-all [letter])
