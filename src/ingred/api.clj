@@ -2,7 +2,10 @@
   (:use [ring.util.response])
   (:require [cornerstone.config :as cfg]
             [ingred.store :as store]
-            [ingred.scraper :as scraper]))
+            [ingred.scraper :as scraper])
+  (:import [java.util UUID]))
+
+(def progresses (atom {}))
 
 (defn index []
   (slurp "resources/public/index.html"))
@@ -26,9 +29,20 @@
 (defn config []
   (response (cfg/config)))
 
+(defn progress-for [uuid]
+  (let [progress (get @progresses uuid)]
+    (response {:uri (str "/progress/" uuid)
+               :total (deref (:total progress))
+               :complete (deref (:complete progress))})))
+
 (defn populate [letter]
-  (let [progress (scraper/scrape-all [letter])]
-    (response {:total (deref (:total progress)) :complete (deref (:complete progress))})))
+  (let [progress (scraper/scrape-all [letter])
+        uuid (UUID/randomUUID)]
+    (swap! progresses assoc uuid progress)
+    (response (progress-for uuid))))
+
+(defn progress [uuid]
+  (response (progress-for (UUID/fromString uuid))))
 
 (defn wipe-store []
   (store/wipe-db)
