@@ -1,65 +1,3 @@
-function populateIngredients() {
-    $.get('/ingredients/', function (data) {
-	$('#ingredients').empty();
-	$.each(data, function(i, e) {
-	    var ingredient = $('<li/>')
-		.append($('<a/>', {class: 'label label-success', href: e.url, title: e.name})
-			.text(e.name)
-			.click(function() { filterRecipesByIngredient(e.name); return false; }));
-	    $('#ingredients').append(ingredient);
-	});
-    });
-}
-
-function filterRecipesByIngredient(ingredient) {
-    $.get('/ingredients/' + ingredient, function (data) {
-	$('#recipes').empty();
-	$('#filterValue').text(ingredient);
-	$('#filterType').text('ingredient');
-	$('#filter').show();
-	$.each(data, function(i, e) {
-	    var recipe = $('<li/>')
-		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
-			.text(e.name)
-			.click(function() { loadRecipe(e.url); return false; }));
-	    $('#recipes').append(recipe);
-	});
-    });
-}
-
-function filterRecipesByLetter(letter) {
-    $.get('/recipes/' + letter + '/', function (data) {
-	$('#recipes').empty();
-	$('#filterValue').text(letter);
-	$('#filterType').text('letter');
-	$('#filter').show();
-	$.each(data, function(i, e) {
-	    var recipe = $('<li/>')
-		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
-			.text(e.name)
-			.click(function() { loadRecipe(e.url); return false; }));
-	    $('#recipes').append(recipe);
-	});
-    });
-}
-
-function searchRecipes() {
-    var searchTerm = $('#search-term').val();
-    $.get('/recipes/search/' + searchTerm + '/', function (data) {
-	$('#recipes').empty();
-	$('#filterValue').text(searchTerm);
-	$('#filterType').text('search term');
-	$('#filter').show();
-	$.each(data, function(i, e) {
-	    var recipe = $('<li/>')
-		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
-			.text(e.name)
-			.click(function() { loadRecipe(e.url); return false; }));
-	    $('#recipes').append(recipe);
-	});
-    });
-}
-
 function loadRecipe(url) {
     $.get(url, function (recipe) {
 	$('#recipe-name').text(recipe.name);
@@ -87,6 +25,68 @@ function loadRecipe(url) {
     });
 }
 
+function populateIngredients() {
+    $.get('/ingredients/', function (data) {
+	$('#ingredients').empty();
+	$.each(data, function(i, e) {
+	    var ingredient = $('<li/>')
+		.append($('<a/>', {class: 'label label-success', href: e.url, title: e.name})
+			.text(e.name)
+			.click(function() { filterRecipesByIngredient(e.name); return false; }));
+	    $('#ingredients').append(ingredient);
+	});
+    });
+}
+
+function filterRecipesByIngredient(ingredient) {
+    $.get('/ingredients/' + ingredient, function (data) {
+	$('#recipes').empty();
+	$('#filterValue').text(ingredient);
+	$('#filterType').text('ingredient');
+	$('#filter').show();
+	appendRecipes(data);
+    });
+}
+
+function filterRecipesByLetter(letter) {
+    $.get('/recipes/' + letter + '/', function (data) {
+	$('#recipes').empty();
+	$('#filterValue').text(letter);
+	$('#filterType').text('letter');
+	$('#filter').show();
+	appendRecipes(data);
+    });
+}
+
+function searchRecipes() {
+    var searchTerm = $('#search-term').val();
+    $.get('/recipes/search/' + searchTerm + '/', function (data) {
+	$('#recipes').empty();
+	$('#filterValue').text(searchTerm);
+	$('#filterType').text('search term');
+	$('#filter').show();
+	appendRecipes(data);
+    });
+}
+
+function populateRecipes() {
+    $.get('/recipes/', function (data) {
+	$('#filter').hide();
+	appendRecipes(data);
+    });
+}
+
+function appendRecipes(recipes) {
+    $('#recipes').empty();
+    $.each(recipes, function(i, e) {
+	var recipe = $('<li/>')
+	    .append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
+		    .text(e.name)
+		    .click(function() { loadRecipe(e.url); return false; }));
+	$('#recipes').append(recipe);
+    });
+}
+
 function resetFilter() {
     populateRecipes();
 }
@@ -107,20 +107,6 @@ function updateProgressBar(uri) {
 	    populateRecipes();
 	    populateIngredients();
 	}
-    });
-}
-
-function populateRecipes() {
-    $.get('/recipes/', function (data) {
-	$('#filter').hide();
-	$('#recipes').empty();
-	$.each(data, function(i, e) {
-	    var recipe = $('<li/>')
-		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
-			.text(e.name)
-			.click(function() { loadRecipe(e.url); return false; }));
-	    $('#recipes').append(recipe);
-	});
     });
 }
 
