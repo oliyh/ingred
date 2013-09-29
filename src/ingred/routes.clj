@@ -18,6 +18,7 @@
 
   (GET "/config" [] (api/config))
   (GET "/progress/:uuid" [uuid] (api/progress uuid))
+  (POST "/admin/populate" [] (api/populate))
   (POST "/admin/populate/:letter" [letter] (api/populate letter))
   (DELETE "/admin/wipe" [] (api/wipe-store)))
 

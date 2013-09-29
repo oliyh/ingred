@@ -141,5 +141,10 @@ $(document).ready(function () {
 	    updateProgressBar(data.uri);
 	});
     });
+    $('#populate-all-button').click(function() {
+	$.post('/admin/populate', function(data) {
+	    updateProgressBar(data.uri);
+	});
+    });
     $('#wipe-button').click(wipeStore);
 });

@@ -83,7 +83,7 @@
   (store/init))
 
 (defn scrape-all
-  ([] (scrape-all (take 1 letters)))
+  ([] (scrape-all (into [] letters)))
   ([letters]
      (let [total (atom 0)
            complete (atom 0)]

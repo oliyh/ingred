@@ -41,11 +41,14 @@
                :elapsed elapsed
                :elapsed-human (str (Math/round (double (/ elapsed 1000))) "s")})))
 
-(defn populate [letter]
-  (let [progress (scraper/scrape-all [letter])
-        uuid (UUID/randomUUID)]
+(defn start-population [progress]
+  (let [uuid (UUID/randomUUID)]
     (swap! progresses assoc uuid progress)
     (progress-for uuid)))
+
+(defn populate
+  ([] (start-population (scraper/scrape-all)))
+  ([letter] (start-population (scraper/scrape-all [letter]))))
 
 (defn progress [uuid]
   (progress-for (UUID/fromString uuid)))
