@@ -27,6 +27,9 @@
 (defn load-recipe [id]
   (response (store/load-recipe id)))
 
+(defn search-recipes [term]
+  (response (recipe-summary (store/search-recipes term))))
+
 (defn config []
   (response (cfg/config)))
 

@@ -10,6 +10,7 @@
   (GET "/" [] (api/index))
 
   (GET "/recipes/" [] (api/list-recipes))
+  (GET "/recipes/search/:term" [term] (api/search-recipes term))
   (GET "/recipes/:letter/" [letter] (api/list-recipes letter))
   (GET "/recipes/:id" [id] (api/load-recipe id))
 

@@ -44,5 +44,9 @@
 (defn list-ingredients []
   (mapcat :ingredients (mc/find-maps table {} ["ingredients.name"])))
 
+(defn search-recipes [term]
+  (map replace-_id (mc/find-maps table
+                                 {:name {$regex (str ".*" term ".*") $options "i"}})))
+
 (defn wipe-db []
   (mc/remove table))
