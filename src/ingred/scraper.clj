@@ -91,22 +91,22 @@
          (time
           (doall
            (->> letters
-                (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 1)
+                (processing/pipe-seq (fn [x] (foods-for-letter x)) 4 26)
                 processing/unfold
                 (processing/pipe-seq
                  (fn [x]
                    (let [recipes (recipes-for-food x)]
                      (swap! total + (count recipes))
                      recipes))
-                 4 1)
+                 4 100)
                 processing/unfold
-                (processing/pipe-seq (fn [x] (read-recipe x)) 4 1)
+                (processing/pipe-seq (fn [x] (read-recipe x)) 4 10)
                 (processing/pipe-seq
                  (fn [x]
                    (swap! complete inc)
                    (println "saved" (:uri x))
                    (:id (store/save x)))
-                 4 1)))))
+                 4 10)))))
        {:total total :complete complete})))
 
 ;; by cuisine
