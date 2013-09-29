@@ -23,3 +23,8 @@
 #reset-filter {
     float: right;
 }
+
+.list-container {
+    max-height: 200px;
+    overflow-y: scroll;
+}

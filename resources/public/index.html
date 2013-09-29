@@ -48,13 +48,19 @@
 	</div>
 
 	<div id="alphabet-panel" class="panel">
-	  <h2>Alphabetical</h2>
+	  <h2>Search</h2>
 	  <ul id="alphabet" class="clearfix"></ul>
+	  <form class="form-inline" onsubmit="return false;">
+	    <input type="text" id="search-term" placeholder="Search..."></input>
+	    <button class="btn btn-info btn-xs" id="search-button">Search</button>
+	  </form>
 	</div>
 
 	<div id="ingredients-panel" class="panel">
 	  <h2>Ingredients</h2>
-	  <ul id="ingredients" class="clearfix"></ul>
+	  <div class="list-container">
+	    <ul id="ingredients" class="clearfix"></ul>
+	  </div>
 	</div>
 
 	<div id="recipe-list-panel" class="panel">
@@ -64,7 +70,9 @@
 	      <button id="reset-filter" class="btn btn-xs btn-danger">Reset</button>
 	    </p>
 	  </div>
-	  <ul id="recipes" class="clearfix"></ul>
+	  <div class="list-container">
+	    <ul id="recipes" class="clearfix"></ul>
+	  </div>
 	</div>
 
 	<div id="recipe-panel" class="panel">

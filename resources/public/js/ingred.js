@@ -43,6 +43,23 @@ function filterRecipesByLetter(letter) {
     });
 }
 
+function searchRecipes() {
+    var searchTerm = $('#search-term').val();
+    $.get('/recipes/search/' + searchTerm + '/', function (data) {
+	$('#recipes').empty();
+	$('#filterValue').text(searchTerm);
+	$('#filterType').text('search term');
+	$('#filter').show();
+	$.each(data, function(i, e) {
+	    var recipe = $('<li/>')
+		.append($('<a/>', {class: 'label label-warning', href: e.url, title: e.name})
+			.text(e.name)
+			.click(function() { loadRecipe(e.url); return false; }));
+	    $('#recipes').append(recipe);
+	});
+    });
+}
+
 function loadRecipe(url) {
     $.get(url, function (recipe) {
 	$('#recipe-name').text(recipe.name);
@@ -132,6 +149,8 @@ $(document).ready(function () {
 		    .click(function() { filterRecipesByLetter(e); return false; }));
 	$('#alphabet').append(letter);
     });
+
+    $('#search-button').click(searchRecipes);
 
     populateIngredients();
     populateRecipes();
