@@ -77,6 +77,18 @@ function resetFilter() {
 
 // admin
 
+function updateProgressBar(uri) {
+    $.get(uri, function (data) {
+	$('#progress').css('width', data.percent + '%');
+	if (data.percent < 100) {
+	    setTimeout(function() { updateProgressBar(uri); }, 1000);
+	} else {
+	    populateRecipes();
+	    populateIngredients();
+	}
+    });
+}
+
 function populateRecipes() {
     $.get('/recipes/', function (data) {
 	$('#filter').hide();
@@ -122,9 +134,7 @@ $(document).ready(function () {
     $('#reset-filter').click(resetFilter);
     $('#populate-button').click(function() {
 	$.post('/admin/populate/' + $('#populate-letter').val(), function(data) {
-	    alert("Populated letter " + $('#populate-letter').val());
-	    populateRecipes();
-	    populateIngredients();
+	    updateProgressBar(data.uri);
 	});
     });
     $('#wipe-button').click(wipeStore);

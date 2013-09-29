@@ -41,10 +41,10 @@
   (let [progress (scraper/scrape-all [letter])
         uuid (UUID/randomUUID)]
     (swap! progresses assoc uuid progress)
-    (response (progress-for uuid))))
+    (progress-for uuid)))
 
 (defn progress [uuid]
-  (response (progress-for (UUID/fromString uuid))))
+  (progress-for (UUID/fromString uuid)))
 
 (defn wipe-store []
   (store/wipe-db)
